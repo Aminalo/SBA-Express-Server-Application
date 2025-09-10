@@ -1,0 +1,17 @@
+{
+  "users": [
+    { "id": 1, "name": "Amina", "role": "admin" },
+    { "id": 2, "name": "Teammate", "role": "user" },
+    { "id": 3, "name": "Guest", "role": "viewer" }
+  ],
+  "boards": [
+    { "id": "alpha", "name": "Sprint Alpha", "description": "Kickoff sprint" },
+    { "id": "beta",  "name": "Sprint Beta",  "description": "Stabilization sprint" }
+  ],
+  "tasks": [
+    { "id": "t1", "boardId": "alpha", "title": "Setup repo",   "assignee": "Amina",    "status": "Backlog",     "points": 2 },
+    { "id": "t2", "boardId": "alpha", "title": "Landing page", "assignee": "Amina",    "status": "In Progress", "points": 5 },
+    { "id": "t3", "boardId": "beta",  "title": "Write tests",  "assignee": "Teammate", "status": "Backlog",     "points": 3 },
+    { "id": "t4", "boardId": "beta",  "title": "Bugfix auth",  "assignee": "Guest",    "status": "Done",        "points": 1 }
+  ]
+}
