@@ -1,4 +1,4 @@
-// Minimal Express app (ESM) + EJS home page
+// Minimal Express app (ESM) + EJS index page
 import express from "express";
 import morgan from "morgan";
 import path from "path";
@@ -21,7 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => res.render("home", { title: "TaskBoard Pro", message: "Hello 👋" }));
+// ✅ changed: render "index" instead of "home"
+app.get("/", (req, res) => res.render("index", { title: "TaskBoard Pro" }));
 
 // 404 + basic error
 app.use((req, res) => res.status(404).send("Not Found"));
