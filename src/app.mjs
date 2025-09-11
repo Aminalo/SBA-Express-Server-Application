@@ -1,4 +1,3 @@
-// Express app at Commit 10: pages (EJS) + users/boards/tasks APIs + extra middlewares
 import express from "express";
 import morgan from "morgan";
 import path from "path";
@@ -8,6 +7,7 @@ import { fileURLToPath } from "url";
 import apiUsers from "./routes/api.users.mjs";
 import apiBoards from "./routes/api.boards.mjs";
 import apiTasks from "./routes/api.tasks.mjs";
+import apiHealth from "./routes/api.health.mjs"; // ✅ NEW (commit 11)
 
 // Pages routes
 import pageRoutes from "./routes/pages.mjs";
@@ -16,7 +16,6 @@ import pageRoutes from "./routes/pages.mjs";
 import globalERR from "./middleware/globalERR.mjs";
 import requestTime from "./middleware/requestTime.mjs";
 import requireJson from "./middleware/requireJson.mjs";
-// ✅ NEW in Commit 10:
 import responseTimer from "./middleware/responseTimer.mjs";
 import apiVersion from "./middleware/apiVersion.mjs";
 
@@ -39,14 +38,15 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Custom middleware (order matters)
 app.use(requestTime);     // adds req.requestTime
-app.use(requireJson);     // enforces JSON for API writes
-app.use(apiVersion);      // ✅ add X-API-Version header on /api/*
-app.use(responseTimer);   // ✅ log response time
+app.use(requireJson);     // enforce JSON for API writes
+app.use(apiVersion);      // X-API-Version header on /api/*
+app.use(responseTimer);   // log response time
 
 // Pages (EJS)
 app.use("/", pageRoutes);
 
 // APIs (JSON)
+app.use("/api/health", apiHealth);  // ✅ health endpoint
 app.use("/api/users",  apiUsers);
 app.use("/api/boards", apiBoards);
 app.use("/api/tasks",  apiTasks);
