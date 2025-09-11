@@ -1,8 +1,10 @@
-// Minimal Express app (ESM) + EJS index page
 import express from "express";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+
+import apiUsers from "./routes/api.users.mjs";
+import apiBoards from "./routes/api.boards.mjs";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,10 +23,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// ✅ changed: render "index" instead of "home"
+// Home
 app.get("/", (req, res) => res.render("index", { title: "TaskBoard Pro" }));
 
-// 404 + basic error
+// API routes
+app.use("/api/users", apiUsers);
+app.use("/api/boards", apiBoards);
+
+// 404 + basic error (will be improved later commits)
 app.use((req, res) => res.status(404).send("Not Found"));
 app.use((err, req, res, next) => { console.error(err); res.status(500).send("Internal Error"); });
 
