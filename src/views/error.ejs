@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><%- include('partials/head') %></head>
+  <body>
+    <%- include('partials/nav') %>
+    <main class="container">
+      <h2><%= status %> — Something went wrong</h2>
+      <p><%= message %></p>
+      <% if (stack) { %><pre class="muted"><%= stack %></pre><% } %>
+      <a class="btn" href="/">Go Home</a>
+    </main>
+  </body>
+</html>
