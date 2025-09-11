@@ -1,20 +1,24 @@
+// Express app at Commit 10: pages (EJS) + users/boards/tasks APIs + extra middlewares
 import express from "express";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// API routes (already created in commits 4–6)
+// API routes
 import apiUsers from "./routes/api.users.mjs";
 import apiBoards from "./routes/api.boards.mjs";
 import apiTasks from "./routes/api.tasks.mjs";
 
-// Pages routes (created in Commit 8)
+// Pages routes
 import pageRoutes from "./routes/pages.mjs";
 
-// Custom middlewares (created in Commit 7)
+// Custom middlewares
 import globalERR from "./middleware/globalERR.mjs";
 import requestTime from "./middleware/requestTime.mjs";
 import requireJson from "./middleware/requireJson.mjs";
+// ✅ NEW in Commit 10:
+import responseTimer from "./middleware/responseTimer.mjs";
+import apiVersion from "./middleware/apiVersion.mjs";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,11 +37,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Custom middleware
-app.use(requestTime);  // adds req.requestTime
-app.use(requireJson);  // enforces JSON for API writes
+// Custom middleware (order matters)
+app.use(requestTime);     // adds req.requestTime
+app.use(requireJson);     // enforces JSON for API writes
+app.use(apiVersion);      // ✅ add X-API-Version header on /api/*
+app.use(responseTimer);   // ✅ log response time
 
-// Pages (EJS): home, boards list, board detail + form
+// Pages (EJS)
 app.use("/", pageRoutes);
 
 // APIs (JSON)
@@ -51,7 +57,7 @@ app.use((req, res) => {
   res.status(404).render("404", { url: req.originalUrl });
 });
 
-// Centralized error handler (JSON for API, EJS for pages)
+// Centralized error handler
 app.use(globalERR);
 
 // Start server
