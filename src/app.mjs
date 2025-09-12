@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -7,7 +8,7 @@ import { fileURLToPath } from "url";
 import apiUsers from "./routes/api.users.mjs";
 import apiBoards from "./routes/api.boards.mjs";
 import apiTasks from "./routes/api.tasks.mjs";
-import apiHealth from "./routes/api.health.mjs"; // ✅ NEW (commit 11)
+import apiHealth from "./routes/api.health.mjs";
 
 // Pages routes
 import pageRoutes from "./routes/pages.mjs";
@@ -30,23 +31,24 @@ const __dirname  = path.dirname(__filename);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Core middleware
+// Third-party & core middleware
+app.use(helmet());                 // ✅ secure HTTP headers
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Custom middleware (order matters)
-app.use(requestTime);     // adds req.requestTime
-app.use(requireJson);     // enforce JSON for API writes
-app.use(apiVersion);      // X-API-Version header on /api/*
-app.use(responseTimer);   // log response time
+app.use(requestTime);              // adds req.requestTime
+app.use(requireJson);              // enforce JSON for API writes
+app.use(apiVersion);               // X-API-Version header on /api/*
+app.use(responseTimer);            // log response time
 
 // Pages (EJS)
 app.use("/", pageRoutes);
 
 // APIs (JSON)
-app.use("/api/health", apiHealth);  // ✅ health endpoint
+app.use("/api/health", apiHealth);
 app.use("/api/users",  apiUsers);
 app.use("/api/boards", apiBoards);
 app.use("/api/tasks",  apiTasks);
