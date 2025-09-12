@@ -12,7 +12,7 @@ const r = Router();
 
 r.get("/", listUsers);
 
-// ✅ RegExp route MUST be BEFORE the numeric :id route
+// RegExp route MUST be BEFORE the numeric :id route
 // Example: GET /api/users/@Amina
 r.get("/@:name([A-Za-z]+)", getUserByName);
 
